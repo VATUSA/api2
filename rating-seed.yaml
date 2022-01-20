@@ -1,0 +1,44 @@
+kind: rating
+values:
+- id: -1
+  short: AFK
+  long: Inactive
+- id: 0
+  short: SUS
+  long: Suspended
+- id: 1
+  short: OBS
+  long: Observer
+- id: 2
+  short: S1
+  long: Student 1
+- id: 3
+  short: S2
+  long: Student 2
+- id: 4
+  short: S3
+  long: Student 3
+- id: 5
+  short: C1
+  long: Controller
+- id: 6
+  short: C2
+  long: Controller 2
+- id: 7
+  short: C3
+  long: Senior Controller
+- id: 8
+  short: I1
+  long: Instructor
+- id: 9
+  short: I2
+  long: Instructor 2
+- id: 10
+  short: I3
+  long: Senior Instructor
+- id: 11
+  short: SUP
+  long: Supervisor
+- id: 12
+  short: ADM
+  long: Administrator
