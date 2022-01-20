@@ -34,7 +34,7 @@ func Run(c *cli.Context) error {
 	log.Logger.Info("Loading configuration")
 	cfg, err := config.Load(c.String("config"))
 	if err != nil {
-		log.Logger.Error("Error loading configuration: %s", err)
+		log.Logger.Error("Error loading configuration: " + err.Error())
 		return err
 	}
 	Config = cfg
