@@ -8,14 +8,14 @@ import (
 )
 
 type R struct {
-	XMLName xml.Name    `xml:"response"`
-	Status  string      `xml:"status" json:"status"`
-	Data    interface{} `xml:"data" json:"data"`
+	XMLName xml.Name    `xml:"response" json:"-" yaml:"-"`
+	Status  string      `xml:"status" json:"status" yaml:"status"`
+	Data    interface{} `xml:"data" json:"data" yaml:"data"`
 }
 
 func RespondMessage(c *gin.Context, status int, message string) {
 	Respond(c, status, struct {
-		Message string `json:"message" xml:"message"`
+		Message string `json:"message" yaml:"message" xml:"message"`
 	}{message})
 }
 

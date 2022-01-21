@@ -78,3 +78,21 @@ func Auth(c *gin.Context) {
 	c.Set("x-guest", true)
 	c.Next()
 }
+
+func NotGuest(c *gin.Context) {
+	if c.GetBool("x-guest") {
+		response.RespondError(c, http.StatusForbidden, "Forbidden")
+		c.Abort()
+		return
+	}
+	c.Next()
+}
+
+func NotGuestOrAPIKey(c *gin.Context) {
+	if c.GetBool("x-guest") || c.GetString("x-auth-type") == "api-key" {
+		response.RespondError(c, http.StatusForbidden, "Forbidden")
+		c.Abort()
+		return
+	}
+	c.Next()
+}

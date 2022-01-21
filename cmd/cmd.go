@@ -52,6 +52,7 @@ func BuildDatabase() error {
 }
 
 func BuildRedis() {
+	vatlog.Logger.WithField("component", "cmd").Info("Connecting to Redis")
 	opts := database.RedisOptions{
 		Password: config.Cfg.Redis.Password,
 		DB:       config.Cfg.Redis.DB,

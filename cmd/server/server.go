@@ -6,6 +6,7 @@ import (
 	"github.com/vatusa/api2/cmd"
 	"github.com/vatusa/api2/cmd/migrate"
 	"github.com/vatusa/api2/internal/config"
+	internalServer "github.com/vatusa/api2/internal/server"
 	"github.com/vatusa/api2/pkg/vatlog"
 )
 
@@ -54,5 +55,8 @@ func Run(c *cli.Context) error {
 		}
 	}
 
-	return nil
+	cmd.BuildRedis()
+
+	log.Info("Passing control to internal server")
+	return internalServer.Run()
 }
