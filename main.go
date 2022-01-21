@@ -56,3 +56,20 @@ func main() {
 
 	app.Run(os.Args)
 }
+
+// @title VATUSA API
+// @version 3.0
+// @description VATUSA APIv2
+
+// @contact.name Daniel Hawton
+// @contact.email daniel@hawton.org
+
+// @license.name BSD
+// @license.url https://github.com/VATUSA/api2/blob/main/LICENSE
+
+// @host api.vatusa.net
+// @BasePath /v3
+// @query.collection.format multi
+
+// @securityDefinitions.basic BasicAuth
+// @description JWT (header: Authorization: Bearer (token)), APIKey (header: X-API-Key: (apikey)), or Session Cookie

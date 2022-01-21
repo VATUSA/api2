@@ -1,14 +1,15 @@
 package router
 
 import (
-	"net/http"
-
 	"github.com/gin-gonic/gin"
-	"github.com/vatusa/api2/pkg/gin/response"
+	"github.com/vatusa/api2/internal/api"
 )
 
 func CreateRoutes(engine *gin.Engine) {
-	engine.GET("/ping", func(c *gin.Context) {
-		response.RespondMessage(c, http.StatusOK, "PONG")
-	})
+	engine.GET("/ping", api.GetPing)
+
+	v3 := engine.Group("/v3")
+	{
+		v3.GET("/ping", api.GetPing)
+	}
 }

@@ -10,7 +10,7 @@ Very much a work in progress
 - Golang 1.17
 - A Linux environment (WSL, Linux, OS X [should work?])
 
-### Install
+### Install and run
 
 1. Install PostgreSQL and Redis containers
 
@@ -20,7 +20,7 @@ Very much a work in progress
 
     **Note** In the development environment, Redis will not use a password. Either leave this blank in the YAML or comment out the password line.
 
-2. Run migrations and seed ratings
+2. Run migrations and seed ratings (more soon)
 
     ```bash
     go run . migrate
@@ -37,6 +37,26 @@ Very much a work in progress
 
     ```bash
     cp config.yaml.example config.yaml
+    ```
+
+5. Generate docs (optional if building binary using `make build`, otherwise required)
+
+   ```bash
+   make build-docs
+   ```
+
+6. Generate binary (optional if using `go run .`)
+
+    ```bash
+    make build
+    ```
+
+7. Starting the API
+
+    ```bash
+    go run . server
+    ## OR ##
+    ./build/api server
     ```
 
 ## Running tests

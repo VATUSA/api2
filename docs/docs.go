@@ -17,12 +17,63 @@ var doc = `{
     "info": {
         "description": "{{escape .Description}}",
         "title": "{{.Title}}",
-        "contact": {},
+        "contact": {
+            "name": "Daniel Hawton",
+            "email": "daniel@hawton.org"
+        },
+        "license": {
+            "name": "BSD",
+            "url": "https://github.com/VATUSA/api2/blob/main/LICENSE"
+        },
         "version": "{{.Version}}"
     },
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
-    "paths": {}
+    "paths": {
+        "/ping": {
+            "get": {
+                "description": "Ping, healthcheck endpoint",
+                "consumes": [
+                    "application/json",
+                    "text/xml",
+                    "application/x-yaml"
+                ],
+                "produces": [
+                    "application/json",
+                    "text/xml",
+                    "application/x-yaml"
+                ],
+                "tags": [
+                    "misc"
+                ],
+                "summary": "Ping, healthcheck endpoint",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.R"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "response.R": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
 }`
 
 type swaggerInfo struct {
@@ -36,12 +87,12 @@ type swaggerInfo struct {
 
 // SwaggerInfo holds exported Swagger Info so clients can modify it
 var SwaggerInfo = swaggerInfo{
-	Version:     "",
-	Host:        "",
-	BasePath:    "",
+	Version:     "3.0",
+	Host:        "api.vatusa.net",
+	BasePath:    "/v3",
 	Schemes:     []string{},
-	Title:       "",
-	Description: "",
+	Title:       "VATUSA API",
+	Description: "JWT (header: Authorization: Bearer (token)), APIKey (header: X-API-Key: (apikey)), or Session Cookie",
 }
 
 type s struct{}
@@ -76,5 +127,5 @@ func (s *s) ReadDoc() string {
 }
 
 func init() {
-	swag.Register(swag.Name, &s{})
+	swag.Register("swagger", &s{})
 }

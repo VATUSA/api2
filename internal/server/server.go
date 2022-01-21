@@ -19,6 +19,8 @@ import (
 	"github.com/vatusa/api2/pkg/gin/middleware/auth"
 	"github.com/vatusa/api2/pkg/gin/middleware/logger"
 	"github.com/vatusa/api2/pkg/vatlog"
+
+	_ "github.com/vatusa/api2/docs"
 )
 
 type Server struct {

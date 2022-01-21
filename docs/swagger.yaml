@@ -1,4 +1,44 @@
+basePath: /v3
+definitions:
+  response.R:
+    properties:
+      data: {}
+      status:
+        type: string
+    type: object
+host: api.vatusa.net
 info:
-  contact: {}
-paths: {}
+  contact:
+    email: daniel@hawton.org
+    name: Daniel Hawton
+  description: 'JWT (header: Authorization: Bearer (token)), APIKey (header: X-API-Key:
+    (apikey)), or Session Cookie'
+  license:
+    name: BSD
+    url: https://github.com/VATUSA/api2/blob/main/LICENSE
+  title: VATUSA API
+  version: "3.0"
+paths:
+  /ping:
+    get:
+      consumes:
+      - application/json
+      - text/xml
+      - application/x-yaml
+      description: Ping, healthcheck endpoint
+      produces:
+      - application/json
+      - text/xml
+      - application/x-yaml
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.R'
+      summary: Ping, healthcheck endpoint
+      tags:
+      - misc
+securityDefinitions:
+  BasicAuth:
+    type: basic
 swagger: "2.0"

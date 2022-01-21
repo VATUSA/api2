@@ -1,7 +1,63 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "description": "JWT (header: Authorization: Bearer (token)), APIKey (header: X-API-Key: (apikey)), or Session Cookie",
+        "title": "VATUSA API",
+        "contact": {
+            "name": "Daniel Hawton",
+            "email": "daniel@hawton.org"
+        },
+        "license": {
+            "name": "BSD",
+            "url": "https://github.com/VATUSA/api2/blob/main/LICENSE"
+        },
+        "version": "3.0"
     },
-    "paths": {}
+    "host": "api.vatusa.net",
+    "basePath": "/v3",
+    "paths": {
+        "/ping": {
+            "get": {
+                "description": "Ping, healthcheck endpoint",
+                "consumes": [
+                    "application/json",
+                    "text/xml",
+                    "application/x-yaml"
+                ],
+                "produces": [
+                    "application/json",
+                    "text/xml",
+                    "application/x-yaml"
+                ],
+                "tags": [
+                    "misc"
+                ],
+                "summary": "Ping, healthcheck endpoint",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/response.R"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "response.R": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "status": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BasicAuth": {
+            "type": "basic"
+        }
+    }
 }

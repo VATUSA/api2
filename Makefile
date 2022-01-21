@@ -12,7 +12,10 @@ dev-containers:
 dev-jwks:
 	bash scripts/generate-jwks.sh
 
-build:
+build-docs:
+	bash scripts/generate-docs.sh
+
+build: build-docs
 	$(ENVVARS) $(COMPILER) -o build/api
 
 clean:
