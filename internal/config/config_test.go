@@ -19,7 +19,23 @@ database:
     password: secret12345
     database: vatusa_dev
     driver: pgsql
-    automigrate: true`)
+    automigrate: true
+
+redis:
+    password: secret
+    database: 0
+    sentinel: true
+    master_name: mymaster
+    sentinel_addrs:
+    - sentinel-0.redis.svc:26379
+    address: redis.redis.svc:6379
+
+session:
+    cookie:
+        name: vatusa
+        secret: password
+    jwt:
+        jwks_path: jwks.json`)
 
 	structConfig := Config{
 		Server: ConfigServer{
@@ -34,6 +50,30 @@ database:
 			Database:    "vatusa_dev",
 			Driver:      "pgsql",
 			AutoMigrate: true,
+		},
+
+		Redis: ConfigRedis{
+			Password:   "secret",
+			DB:         0,
+			Sentinel:   true,
+			MasterName: "mymaster",
+			SentinelAddrs: []string{
+				"sentinel-0.redis.svc:26379",
+			},
+			Address: "redis.redis.svc:6379",
+		},
+
+		Session: ConfigSession{
+			Cookie: ConfigSessionCookie{
+				Name:   "vatusa",
+				Secret: "password",
+				Domain: ".vatusa.net", // Default
+				Path:   "/",           // Default
+				MaxAge: 604800,        // Default
+			},
+			JWT: ConfigSessionJWT{
+				JWKSPath: "jwks.json",
+			},
 		},
 	}
 

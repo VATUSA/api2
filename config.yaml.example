@@ -10,3 +10,26 @@ database:
     database: vatusa
     driver: postgres
     automigrate: true
+
+redis:
+    password: secret
+    database: 0
+#### If using Sentinel:
+#    sentinel: true
+#    master_name: master
+#    sentinel_addrs:
+#    - sentinel-0.redis.svc:26379
+#    - sentinel-1.redis.svc:26379
+#    - sentinel-2.redis.svc:26379   
+#### If using standalone Redis:
+#    address: redis.redis.svc:6379
+
+session:
+    cookie:
+        name: vatusa
+        secret: secret
+        domain: ".vatusa.net"
+        path: "/"
+        max_age: 604800
+    jwt:
+        jwks_path: jwks.json

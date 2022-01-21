@@ -8,7 +8,7 @@ import (
 	"github.com/vatusa/api2/cmd/migrate"
 	"github.com/vatusa/api2/cmd/seed"
 	"github.com/vatusa/api2/cmd/server"
-	"github.com/vatusa/api2/pkg/log"
+	"github.com/vatusa/api2/pkg/vatlog"
 )
 
 func main() {
@@ -36,19 +36,19 @@ func main() {
 		},
 		Before: func(c *cli.Context) error {
 			format := c.String("log-format")
-			if !log.IsValidFormat(format) {
+			if !vatlog.IsValidFormat(format) {
 				return errors.New("invalid log format")
 			}
-			log.New(format)
+			vatlog.New(format)
 
-			if log.IsValidLogLevel(c.String("log-level")) {
-				l, _ := log.ParseLogLevel(c.String("log-level"))
-				log.Logger.SetLevel(l)
+			if vatlog.IsValidLogLevel(c.String("log-level")) {
+				l, _ := vatlog.ParseLogLevel(c.String("log-level"))
+				vatlog.Logger.SetLevel(l)
 			} else {
 				return errors.New("invalid log level")
 			}
 
-			log.Logger.Info("Starting VATUSA API")
+			vatlog.Logger.Info("Starting VATUSA API")
 
 			return nil
 		},

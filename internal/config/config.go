@@ -4,8 +4,44 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/imdario/mergo"
 	"sigs.k8s.io/yaml"
 )
+
+var Cfg *Config
+
+var defaultConfig = Config{
+	Server: ConfigServer{
+		Port: "3000",
+		Host: "0.0.0.0",
+	},
+	Database: ConfigDatabase{
+		Host:        "127.0.0.1",
+		Port:        "5432",
+		User:        "postgres",
+		Password:    "secret12345",
+		Database:    "vatusa",
+		Driver:      "postgres",
+		AutoMigrate: true,
+	},
+	Redis: ConfigRedis{
+		Password: "",
+		DB:       0,
+		Address:  "127.0.0.1:6379",
+	},
+	Session: ConfigSession{
+		Cookie: ConfigSessionCookie{
+			Name:   "vatusa",
+			Secret: "secret12345",
+			Domain: ".vatusa.net",
+			Path:   "/",
+			MaxAge: 604800,
+		},
+		JWT: ConfigSessionJWT{
+			JWKSPath: "jwks.json",
+		},
+	},
+}
 
 func Load(filename string) (*Config, error) {
 	file, err := os.Open(filename)
@@ -27,6 +63,10 @@ func Parse(config []byte) (*Config, error) {
 
 	err := yaml.Unmarshal(config, &c)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := mergo.Merge(&c, defaultConfig); err != nil {
 		return nil, err
 	}
 

@@ -5,11 +5,13 @@ import (
 	"io/ioutil"
 	"os"
 
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
+	"github.com/vatusa/api2/cmd"
 	"github.com/vatusa/api2/internal/config"
 	"github.com/vatusa/api2/internal/seed"
 	"github.com/vatusa/api2/pkg/database"
-	"github.com/vatusa/api2/pkg/log"
+	"github.com/vatusa/api2/pkg/vatlog"
 )
 
 func Command() *cli.Command {
@@ -41,76 +43,63 @@ func Command() *cli.Command {
 }
 
 var Config *config.Config
+var log *logrus.Entry
 
 func Run(c *cli.Context) error {
+	log = vatlog.Logger.WithField("component", "cmd/seed")
+
 	if !seed.IsValidSeedType(c.String("seed-type")) {
 		return errors.New("invalid seed type: " + c.String("seed-type"))
 	}
 
-	log.Logger.Info("Loading configuration")
-	cfg, err := config.Load(c.String("config"))
+	err := cmd.LoadConfig(c.String("config"))
 	if err != nil {
-		log.Logger.Error("Error loading configuration: " + err.Error())
 		return err
 	}
-	Config = cfg
 
-	log.Logger.Info("Connecting to Database")
-	opts := database.DBOptions{
-		Host:     Config.Database.Host,
-		Port:     Config.Database.Port,
-		User:     Config.Database.User,
-		Password: Config.Database.Password,
-		Database: Config.Database.Database,
-		Driver:   Config.Database.Driver,
-		Options:  "sslmode=disable TimeZone=UTC",
-		Logger:   log.Logger,
-	}
-	err = database.Connect(opts)
+	err = cmd.BuildDatabase()
 	if err != nil {
-		log.Logger.Error("Error connecting to database: " + err.Error())
 		return err
 	}
-	log.Logger.Info("Connected to database")
 
-	log.Logger.Info("Loading seed")
+	log.Info("Loading seed")
 	file, err := os.Open(c.String("file"))
 	if err != nil {
-		log.Logger.Error("Error opening file: " + err.Error())
+		log.Error("Error opening file: " + err.Error())
 		return err
 	}
 	defer file.Close()
 
 	data, err := ioutil.ReadAll(file)
 	if err != nil {
-		log.Logger.Error("Error reading file: " + err.Error())
+		log.Error("Error reading file: " + err.Error())
 		return err
 	}
 
 	s, err := seed.BuildSeed(c.String("seed-type"), data)
 	if err != nil {
-		log.Logger.Error("Error building seed: " + err.Error())
+		log.Error("Error building seed: " + err.Error())
 		return err
 	}
 
-	log.Logger.Info("Seeding database")
+	log.Info("Seeding database")
 
 	switch s.Kind {
 	case "rating":
 		ratings := seed.BuildRatings(s.Values)
 		if database.DB.Create(ratings).Error != nil {
-			//			log.Logger.Error("Error seeding ratings: " + err.Error())
+			log.Error("Error seeding ratings: " + err.Error())
 			return err
 		}
 	case "facility":
 		facilities := seed.BuildFacilities(s.Values)
 		if database.DB.Create(facilities).Error != nil {
-			//			log.Logger.Error("Error seeding facilities: " + err.Error())
+			log.Error("Error seeding facilities: " + err.Error())
 			return err
 		}
 	}
 
-	log.Logger.Info("Seeding complete")
+	log.Info("Seeding complete")
 
 	return nil
 }

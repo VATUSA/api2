@@ -1,10 +1,15 @@
 package server
 
 import (
+	"github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
+	"github.com/vatusa/api2/cmd"
+	"github.com/vatusa/api2/cmd/migrate"
 	"github.com/vatusa/api2/internal/config"
-	"github.com/vatusa/api2/pkg/log"
+	"github.com/vatusa/api2/pkg/vatlog"
 )
+
+var log *logrus.Entry
 
 func Command() *cli.Command {
 	return &cli.Command{
@@ -28,27 +33,26 @@ func Command() *cli.Command {
 	}
 }
 
-var Config *config.Config
-
 func Run(c *cli.Context) error {
-	log.Logger.Info("Loading configuration")
-	cfg, err := config.Load(c.String("config"))
+	log = vatlog.Logger.WithField("component", "cmd/server")
+	err := cmd.LoadConfig(c.String("config"))
 	if err != nil {
-		log.Logger.Error("Error loading configuration: " + err.Error())
 		return err
 	}
-	Config = cfg
 
-	log.Logger.Info("Connecting to Database")
-	/* 	opts := database.DBOptions{
-		Host:     Config.Database.Host,
-		Port:     Config.Database.Port,
-		User:     Config.Database.User,
-		Password: Config.Database.Password,
-		Database: Config.Database.Database,
-		Driver:   Config.Database.Driver,
-		Options:  "sslmode=disable TimeZone=UTC",
-	} */
+	err = cmd.BuildDatabase()
+	if err != nil {
+		return err
+	}
+
+	log.Debug("Checking if we should automigrate")
+	if config.Cfg.Database.AutoMigrate {
+		log.Info("Migrating database")
+		err := migrate.Run(c)
+		if err != nil {
+			return err
+		}
+	}
 
 	return nil
 }
