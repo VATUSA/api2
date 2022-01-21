@@ -69,9 +69,11 @@ make test
 
 - cmd/cmd.go - Common functions used by multiple subcommands
 - cmd/(subdir) - Subcommands for the api binary
+- docs/ - Swaggo generated files [best not to touch]
 - internal/ - Packages that are only usable by the api binary, they have dependencies that are unlikely to be addressed by other projects or are project specific
 - pkg/ - Packages that should have minimal requirements to maintain portability, these can be used in other VATUSA projects or by external groups
 - scripts/ - These are helper scripts that are used external to the API binary (development env building, container image building, etc.)
+- static/ - Static html files
 
 ## Contributors
 

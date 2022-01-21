@@ -9,15 +9,15 @@ import (
 )
 
 type APIKey struct {
-	ID          uint64    `xml:"id" json:"id"`
-	FacilityID  uint64    `xml:"-" json:"-" gorm:"index:facility"`
-	Facility    Facility  `xml:"facility" json:"facility"`
-	Name        string    `xml:"name" json:"name"`
-	Token       string    `xml:"-" json:"-" gorm:"type:varchar(48);index:token"`
-	NeverExpire bool      `xml:"never_expire" json:"never_expire"`
-	ExpiresAt   time.Time `xml:"expires_at" json:"expires_at"`
-	CreatedAt   time.Time `xml:"created_at" json:"created_at"`
-	UpdatedAt   time.Time `xml:"updated_at" json:"updated_at"`
+	ID          uint64    `xml:"id" json:"id" yaml:"id"`
+	FacilityID  uint64    `xml:"-" json:"-" yaml:"-" gorm:"index:facility"`
+	Facility    Facility  `xml:"facility" json:"facility" yaml:"facility"`
+	Name        string    `xml:"name" json:"name" yaml:"name"`
+	Token       string    `xml:"-" json:"-" yaml:"-" gorm:"type:varchar(48);index:token"`
+	NeverExpire bool      `xml:"never_expire" json:"never_expire" yaml:"never_expire"`
+	ExpiresAt   time.Time `xml:"expires_at" json:"expires_at" yaml:"expires_at"`
+	CreatedAt   time.Time `xml:"created_at" json:"created_at" yaml:"created_at"`
+	UpdatedAt   time.Time `xml:"updated_at" json:"updated_at" yaml:"updated_at"`
 }
 
 func FindFacilityByAPIKey(token string) (*Facility, error) {
