@@ -35,7 +35,7 @@ func Respond(c *gin.Context, status int, data interface{}) {
 
 	if acceptYaml(c.GetHeader("Accept")) {
 		c.YAML(status, ret)
-	} else if c.GetHeader("Accept") == "application/xml" {
+	} else if c.GetHeader("Accept") == "application/xml" || c.GetHeader("Accept") == "text/xml" {
 		c.XML(status, ret)
 	} else {
 		c.JSON(status, ret)
